@@ -8,7 +8,10 @@ public class MergeSort {
         if (arrayList.size() <= 1)
             return arrayList;
         int mid = arrayList.size() / 2;
-        return merge(arrayList.subList(0, mid), arrayList.subList(mid, arrayList.size()));
+        return merge(
+                mergeSort(new ArrayList<>(arrayList.subList(0, mid))),
+                mergeSort(new ArrayList<>(arrayList.subList(mid, arrayList.size())))
+        );
     }
 
     public static ArrayList<Integer> merge(List<Integer> listL, List<Integer> listR) {
@@ -17,10 +20,18 @@ public class MergeSort {
         int sizeL = listL.size(), sizeR = listR.size();
         int sizeResult = sizeL + sizeR;
         for (int i = 0; i < sizeResult; i++) {
-            if (listL.get(iL) <= listR.get(iR))
+            if (iL == sizeL) {
+                result.addAll(i, listR.subList(iR, sizeR));
+                break;
+            } else if (iR == sizeR) {
+                result.addAll(i, listL.subList(iL, sizeL));
+                break;
+            }
+            if (listL.get(iL) <= listR.get(iR)) {
                 result.add(i, listL.get(iL++));
-            else
+            } else {
                 result.add(i, listR.get(iR++));
+            }
         }
         return result;
     }
